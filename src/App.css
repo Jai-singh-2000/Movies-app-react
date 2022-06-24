@@ -36,3 +36,59 @@
     transform: rotate(360deg);
   }
 }
+
+
+.banner-wrapper{
+  /* background: url("https://cdn.mos.cms.futurecdn.net/3JCaEkiSwWKAwgLMjpChF3-1200-80.jpg"); */
+  width: 100%;
+  position: relative;
+}
+
+.banner{
+  position: absolute;
+  top: 50vh;
+  left:5vw;
+  min-height: 15vh;
+  width: 80vw;
+  color:white;
+}
+
+
+.banner-image{
+  height: 80vh;
+}
+
+.movies-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  /* background-color: yellow; */
+  justify-content: space-evenly;
+}
+
+.movies-wrapper>div{
+  margin: 1rem;
+  width: 20vw;
+  height: 40vh;
+  overflow: hidden;
+  position: relative;
+
+}
+
+.movies-wrapper>div>img{
+    height: 100%;
+    /* background-size: cover; */
+}
+
+.movie-button{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 2rem;
+  left: 25%;
+}
+
+.movie-title{
+  position: absolute;
+  left:1rem;
+  color:rgb(245, 250, 255);
+}
