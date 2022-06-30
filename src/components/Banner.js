@@ -1,7 +1,5 @@
 import axios from "axios";
 import { Component } from "react";
-// import {movies} from "../moviedata";
-
 
 class Banner extends Component{
 
@@ -16,7 +14,7 @@ class Banner extends Component{
     async componentDidMount()
     {
         let response= await axios.get("https://api.themoviedb.org/3/trending/movie/day?api_key=8b441c93ffc0e4ad001b50874f633591");
-        console.log(response.data);
+        // console.log(response.data);
         this.setState({
             movie:response.data.results[0]
         })

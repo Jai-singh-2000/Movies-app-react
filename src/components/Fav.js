@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { movies } from "../moviedata";
 
 class Fav extends Component {
 
@@ -7,45 +6,124 @@ class Fav extends Component {
   {
     super();
     this.state={
-      genres:[]
+      genres:[],
+      currgenre:'All Genres',
+      movies:[]
     }
   }
 
 
-  render() {
-    const moviesArr = movies.results;
-    console.log(moviesArr);
-
-    let genresId={
-         28: "Action" ,
-         12: "Adventure" ,
-         16: "Animation" ,
-         35: "Comedy" ,
-         80: "Crime" ,
-         99: "Documentary" ,
-         18: "Drama" ,
-         10751: "Family" ,
-         14: "Fantasy" ,
-         36: "History" ,
-         27: "Horror" ,
-         10402: "Music" ,
-         9648: "Mystery" ,
-         10749: "Romance" ,
-         878: "Science Fiction" ,
-         10770: "TV Movie" ,
-         53: "Thriller" , 
-         10752: "War" ,
-         37: "Western" ,
-    }
+  componentDidMount()
+  {
     
+    let genresId={
+      28: "Action" ,
+      12: "Adventure" ,
+      16: "Animation" ,
+      35: "Comedy" ,
+      80: "Crime" ,
+      99: "Documentary" ,
+      18: "Drama" ,
+      10751: "Family" ,
+      14: "Fantasy" ,
+      36: "History" ,
+      27: "Horror" ,
+      10402: "Music" ,
+      9648: "Mystery" ,
+      10749: "Romance" ,
+      878: "Science Fiction" ,
+      10770: "TV Movie" ,
+      53: "Thriller" , 
+      10752: "War" ,
+      37: "Western" ,
+    }
+ 
+    let data= JSON.parse(localStorage.getItem('movies-app')||'[]');
     let tempArr=[];
     tempArr.push("All Genres");
-    moviesArr.map((movie)=>{
+    data.map((movie)=>{
       //Agar temp array me genre id ka wo element present naa ho to
       if(!tempArr.includes(genresId[movie.genre_ids[0]])){
         tempArr.push(genresId[movie.genre_ids[0]]);
       }
     })
+
+
+    this.setState({
+      movies:[...data],
+      genres:[...tempArr]
+    })
+  }
+
+
+  handleChangeGenre=(genre)=>{
+    this.setState({
+      currgenre:genre
+    },this.filterMovies)
+  }
+
+  filterMovies=()=>{
+    let data= JSON.parse(localStorage.getItem('movies-app')||'[]');
+    let genresId={
+      28: "Action" ,
+      12: "Adventure" ,
+      16: "Animation" ,
+      35: "Comedy" ,
+      80: "Crime" ,
+      99: "Documentary" ,
+      18: "Drama" ,
+      10751: "Family" ,
+      14: "Fantasy" ,
+      36: "History" ,
+      27: "Horror" ,
+      10402: "Music" ,
+      9648: "Mystery" ,
+      10749: "Romance" ,
+      878: "Science Fiction" ,
+      10770: "TV Movie" ,
+      53: "Thriller" , 
+      10752: "War" ,
+      37: "Western" ,
+    }
+
+    if(this.state.currgenre=='All Genres'){
+      this.setState({
+        movies:[...data]
+      })
+    }else{
+      let filterMovies= data.filter((movie)=>genresId[movie.genre_ids[0]]==this.state.currgenre)
+      this.setState({
+        movies:[...filterMovies]
+      })
+    }
+    
+  }
+
+  render() {
+
+    let genresId={
+      28: "Action" ,
+      12: "Adventure" ,
+      16: "Animation" ,
+      35: "Comedy" ,
+      80: "Crime" ,
+      99: "Documentary" ,
+      18: "Drama" ,
+      10751: "Family" ,
+      14: "Fantasy" ,
+      36: "History" ,
+      27: "Horror" ,
+      10402: "Music" ,
+      9648: "Mystery" ,
+      10749: "Romance" ,
+      878: "Science Fiction" ,
+      10770: "TV Movie" ,
+      53: "Thriller" , 
+      10752: "War" ,
+      37: "Western" ,
+    }
+
+
 
     return (
       <div className="container">
@@ -54,12 +132,17 @@ class Fav extends Component {
             <ul className="list-group">
             
               {
-                tempArr.map((genre)=>(
-                  <li className="list-group-item">{genre}</li>
+                  this.state.genres.map((genre)=>(
+                    this.state.currgenre==genre ? (
+                      <li className="list-group-item active">{genre}</li>
+                    ):(
+                      <li className="list-group-item" onClick={()=>this.handleChangeGenre(genre)}>{genre}</li>
+                    )
 
                 ))
               }
             </ul>
+
           </div>
           <div className="col-9 fav">
             <div className="input-group mb-3">
@@ -82,7 +165,7 @@ class Fav extends Component {
                 </tr>
               </thead>
               <tbody>
-                {moviesArr.map((movie) => (
+                {this.state.movies.map((movie) => (
                   <tr>
                     <th scope="row"><img style={{width:"6rem",marginRight:"2rem"}} src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}/>
                     {movie.title}</th>
@@ -91,7 +174,7 @@ class Fav extends Component {
                     <td>{movie.vote_average}</td>
                     <td>
                       <button type="button" className="btn btn-danger">
-                        Danger
+                        Delete
                       </button>
                     </td>
                   </tr>

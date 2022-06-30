@@ -10,6 +10,7 @@ class MovieList extends Component {
       pageArr: [1],
       movies: [],
       currPage: 1,
+      favourites:[]
     };
   }
 
@@ -18,7 +19,7 @@ class MovieList extends Component {
     const response = await axios.get(
       `https://api.themoviedb.org/3/movie/popular?api_key=8b441c93ffc0e4ad001b50874f633591&language=en-US&page=${this.state.currPage} `
     );
-    console.log(response.data);
+    // console.log(response.data);
     this.setState({
       movies: [...response.data.results],
     });
@@ -46,22 +47,46 @@ class MovieList extends Component {
 
   handlePrev = () => {
 
-    if(this.state.currPage!=1)
-    {
+    if (this.state.currPage != 1) {
       this.setState(
         {
           currPage: this.state.currPage - 1,
-        },this.changeMovies );
-    }    
+        }, this.changeMovies);
+    }
   };
 
 
-  handlePageClick=(page)=>{
-    if(page!=this.state.currPage){
+  handlePageClick = (page) => {
+    if (page != this.state.currPage) {
       this.setState({
-        currPage:page
-      },this.changeMovies);
+        currPage: page
+      }, this.changeMovies);
     }
+  }
+ 
+  handleFav=(movieObj)=>{
+    let oldData=JSON.parse( localStorage.getItem('movies-app') || '[]');
+
+    if(this.state.favourites.includes(movieObj.id))
+    {
+      oldData=oldData.filter((movie)=>movie.id!=movieObj.id); 
+      //If movie present already
+    }else{
+      oldData.push(movieObj); 
+      //If movie not present
+    }
+
+    localStorage.setItem('movies-app',JSON.stringify(oldData));
+    this.handleFavState();
+  }
+
+  handleFavState=()=>{
+    let oldData=JSON.parse(localStorage.getItem('movies-app')||'[]');
+    let temp=oldData.map((movie)=>movie.id)
+    this.setState({
+      favourites:[...temp]
+    })
+
   }
 
   render() {
@@ -91,10 +116,10 @@ class MovieList extends Component {
                 </h5>
                 <div className="movie-button">
                   {this.state.hover == movie.id && (
-                    <a href="#" className="btn btn-primary">
-                      Add to Favourites
-                    </a>
-                  )}
+                    <a className="btn btn-primary" onClick={()=>this.handleFav(movie)}>
+                      {this.state.favourites.includes(movie.id)?"Remove from Favourites":"Add to Favourites" }
+                    
+                  </a>)}
                 </div>
               </div>
             </>
@@ -112,7 +137,7 @@ class MovieList extends Component {
 
               {this.state.pageArr.map((page) => (
                 <li className="page-item">
-                  <a className="page-link" href="#" onClick={()=>this.handlePageClick(page)}>
+                  <a className="page-link" href="#" onClick={() => this.handlePageClick(page)}>
                     {page}
                   </a>
                 </li>
