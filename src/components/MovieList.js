@@ -91,7 +91,6 @@ class MovieList extends Component {
 
   render() {
     console.log("rendered");
-    // let moviesArr=movies.results;
     return (
       <>
         <div>
