@@ -1,4 +1,4 @@
 # Movies React App
 
-https://thunderous-kashata-b96925.netlify.app/
+https://movies-jai.netlify.app/
 
